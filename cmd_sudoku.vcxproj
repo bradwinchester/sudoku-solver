@@ -135,11 +135,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Flag.cpp" />
+    <ClCompile Include="Solver.cpp" />
     <ClCompile Include="sudoku.cpp" />
     <ClCompile Include="Puzzle.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Flag.h" />
     <ClInclude Include="Puzzle.h" />
+    <ClInclude Include="Solver.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -42,10 +42,9 @@ public:
 	void setBox(int box, std::array<int, 9> new_box);
 
 
-
 	// other functions
 	void printPuzzle();
-
+	int getBoxNumber(int i, int j);
 };
 
 

@@ -1,17 +1,16 @@
 #include <iostream>
 #include <Puzzle.h>
 #include <array>
-using namespace std;
 
-Puzzle::Puzzle() = default;
+Puzzle::Puzzle() = default; // default constructor 
 Puzzle::Puzzle(int id, Array2d data)
     : m_id{ id }, m_data{ data } {}
-Puzzle::~Puzzle() {}
+Puzzle::~Puzzle() {} // destructor
 
 const Array2d& Puzzle::getData() const { return m_data; }
 void Puzzle::setData(Array2d data) { m_data = data; }
 
-const int& Puzzle::getCell(int i, int j) const { return m_data[i][j]; }
+const int& Puzzle::getCell(int i, int j) const { return m_data[i - 1][j - 1]; }
 void Puzzle::setCell(int i, int j, int val) { m_data[i - 1][j - 1] = val; }
 
 const std::array<int, 9>& Puzzle::getRow(int x) const { return m_data[x - 1]; }
@@ -147,13 +146,6 @@ void Puzzle::setBox(int box, std::array<int, 9> new_box)
     }
 }
 
-
-
-
-
-
-
-
 void Puzzle::printPuzzle()
 {
     for (int i = 0; i < 9; i++) {
@@ -164,4 +156,39 @@ void Puzzle::printPuzzle()
         std::cout << '\n';
         if ((i + 1) % 3 == 0) { std::cout << '\n'; }
     }
+}
+
+int Puzzle::getBoxNumber(int i, int j)
+{
+    if (i <= 3) 
+    {
+        if (j <= 3)
+            return 1;
+        if (j >= 4 && j <= 6)
+            return 2;
+        if (j >= 7)
+            return 3; 
+        
+    }
+    if (i >= 4 && i <= 6) {
+        if (j <= 3)
+            return 4;
+        if (j >= 4 && j <= 6)
+            return 5;
+        if (j >= 7)
+            return 6;
+        
+    }
+    if (i >= 7)
+    {
+        if (j <= 3)
+            return 7;
+        if (j >= 4 && j <= 6)
+            return 8;
+        if (j >= 7)
+            return 9;
+        
+    }
+    
+
 }
