@@ -1,5 +1,5 @@
+#include "Puzzle.h"
 #include <iostream>
-#include <Puzzle.h>
 #include <array>
 
 Puzzle::Puzzle() = default; // default constructor 
@@ -10,8 +10,8 @@ Puzzle::~Puzzle() {} // destructor
 const Array2d& Puzzle::getData() const { return m_data; }
 void Puzzle::setData(Array2d data) { m_data = data; }
 
-const int& Puzzle::getCell(int i, int j) const { return m_data[i - 1][j - 1]; }
-void Puzzle::setCell(int i, int j, int val) { m_data[i - 1][j - 1] = val; }
+const int& Puzzle::getCell(int i, int j) const { return m_data[i-1][j-1]; }
+void Puzzle::setCell(int i, int j, int val) { m_data[i-1][j-1] = val; }
 
 const std::array<int, 9>& Puzzle::getRow(int x) const { return m_data[x - 1]; }
 void Puzzle::setRow(int x, std::array<int, 9> row) { m_data[x - 1] = row; }
@@ -34,7 +34,6 @@ void Puzzle::setCol(int col, std::array<int, 9> new_col)
 {
     for (int i = 0; i < 9; i++) { m_data[i][col - 1] = new_col[i]; }
 }
-
 
 const std::array<int, 9>& Puzzle::getBox(int x) const
 {
@@ -91,6 +90,7 @@ const std::array<int, 9>& Puzzle::getBox(int x) const
         }
     } return box;
 }
+
 void Puzzle::setBox(int box, std::array<int, 9> new_box) 
 {
     for (int i = 0; i < 3; i++)
@@ -148,15 +148,17 @@ void Puzzle::setBox(int box, std::array<int, 9> new_box)
 
 void Puzzle::printPuzzle()
 {
-    for (int i = 0; i < 9; i++) {
-        for (int j = 0; j < 9; j++) {
+    for (int i = 1; i <= 9; i++) {
+        for (int j = 1; j <= 9; j++) {
             std::cout << ' ' << getCell(i, j);
-            if ((j + 1) % 3 == 0) { std::cout << ' '; }
+            if (j % 3 == 0) { std::cout << ' '; }
         }
         std::cout << '\n';
-        if ((i + 1) % 3 == 0) { std::cout << '\n'; }
+        if (i % 3 == 0) { std::cout << '\n'; }
     }
 }
+
+
 
 int Puzzle::getBoxNumber(int i, int j)
 {
