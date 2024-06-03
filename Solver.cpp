@@ -1,7 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include "Solver.h"
-#include "Flag.h"
+#include "Note.h"
 #include <Numeric>
 #include <vector>
 #include <array>
@@ -12,6 +12,11 @@ Solver::Solver(Puzzle puzzle)
 	: m_puzzle { puzzle } 
 {
 	initializeFlags();
+	
+}
+
+void Solver::solveNext()
+{
 }
 
 void Solver::initializeFlags()
@@ -27,13 +32,13 @@ void Solver::initializeFlags()
 			
 			std::vector unionNums = unionArray(row, col, box);
 			std::vector<int> allNums = { 1,2,3,4,5,6,7,8,9 };
-			std::vector<int> flags;
+			std::vector<int> notes;
 
 			std::set_difference(allNums.begin(), allNums.end(), unionNums.begin(), unionNums.end(),
-				std::inserter(flags, flags.begin()));
+				std::inserter(notes, notes.begin()));
 
 			std::string cell_id = std::to_string(i) + '-' + std::to_string(j);
-			m_allFlags.setFlag(cell_id, flags);
+			m_notes.setNote(cell_id, notes);
 
 		}
 	}

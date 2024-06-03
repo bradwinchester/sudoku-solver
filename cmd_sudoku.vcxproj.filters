@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="sudoku.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Puzzle.cpp">
@@ -24,7 +24,7 @@
     <ClCompile Include="Solver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Flag.cpp">
+    <ClCompile Include="Note.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -35,7 +35,7 @@
     <ClInclude Include="Solver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Flag.h">
+    <ClInclude Include="Note.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

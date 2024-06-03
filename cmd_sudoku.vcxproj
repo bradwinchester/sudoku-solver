@@ -135,13 +135,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Flag.cpp" />
+    <ClCompile Include="Note.cpp" />
     <ClCompile Include="Solver.cpp" />
-    <ClCompile Include="sudoku.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="Puzzle.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Flag.h" />
+    <ClInclude Include="Note.h" />
     <ClInclude Include="Puzzle.h" />
     <ClInclude Include="Solver.h" />
   </ItemGroup>
