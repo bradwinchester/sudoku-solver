@@ -12,7 +12,6 @@ public:
 	Puzzle(std::vector<int> data);
 	~Puzzle();
 
-
-
+	void printPuzzle();
 };
 
