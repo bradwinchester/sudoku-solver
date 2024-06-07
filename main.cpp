@@ -8,7 +8,7 @@
 int main()
 {
     std::vector<int> vec = {
-        8,6,3, 7,5,2, 9,4,0,
+        0,6,3, 7,5,2, 9,4,3,
         1,9,4, 8,3,6, 7,5,2,
         2,5,7, 4,1,9, 8,6,3,
 
@@ -23,8 +23,11 @@ int main()
    
     Puzzle p = Puzzle(vec);
     
-
-    p.printPuzzle();
+        
+    p.printPuzzleWithNotes();
+    
+    //for (auto c : p.cells[2])
+    //    std::cout << std::to_string(c) + ' ';
 
     return 0;
 }

@@ -13,5 +13,6 @@ public:
 	~Puzzle();
 
 	void printPuzzle();
+	void printPuzzleWithNotes();
 };
 
