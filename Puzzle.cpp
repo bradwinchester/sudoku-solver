@@ -24,6 +24,29 @@ Puzzle::Puzzle(std::vector<int> data)
 
 Puzzle::~Puzzle() {} // destructor
 
+void Puzzle::updateCell(int cell, std::vector<int> nums)
+{
+	cells[cell] = nums;
+}
+
+std::vector<int> Puzzle::getCell(int cell)
+{
+	return cells[cell];
+}
+
+std::vector<int> Puzzle::getRowIds(int cell)
+{
+	if (cell >= 1 and cell <= 9) { return { 1,2,3,4,5,6,7,8,9 }; }
+	if (cell >= 10 and cell <= 18) { return { 10,11,12,13,14,15,16,17,18 }; }
+	if (cell >= 19 and cell <= 27) { return { 19,20,21,22,23,24,25,26,27}; }
+	if (cell >= 28 and cell <= 36) { return { 28,29,30,31,32,33,34,35,36 }; }
+	if (cell >= 37 and cell <= 45) { return { 37,38,39,40,41,42,43,44,45 }; }
+	if (cell >= 46 and cell <= 54) { return { 46,47,48,49,50,51,52,53,54 }; }
+	if (cell >= 55 and cell <= 63) { return { 55,56,57,58,59,60,61,62,63 }; }
+	if (cell >= 64 and cell <= 72) { return { 64,65,66,67,68,69,70,71,72 }; }
+	if (cell >= 73 and cell <= 81) { return { 73,74,75,76,77,78,79,80,81 }; }
+	return { 0 };
+}
 
 void Puzzle::printPuzzle()
 {
@@ -44,115 +67,50 @@ void Puzzle::printPuzzle()
 
 void Puzzle::printPuzzleWithNotes()
 {
+	std::cout << "-------------------------------------------------------" << '\n';
 	std::vector<int> vec{};
-	for (int i = 0; i < 81; i += 9) { // 0, 9, 18, 27, 36, 45, 54, 63, 72 				
+	for (int i = 0; i < 81; i += 9) {  				
 		for (int j = 1; j <= 9; j++) {
 			vec = cells[i + j];
-			if (vec.size() == 1) { std::cout << std::to_string(vec[0]) + ' ' + std::to_string(vec[0]) + ' ' + std::to_string(vec[0]); }
-			else { std::cout << std::to_string(vec[0]) + ' ' + std::to_string(vec[1]) + ' ' + std::to_string(vec[2]); }
-			if (j == 3 or j == 6) { std::cout << "  |  "; }
-			else { std::cout << "   "; }
+			if (j == 1) { std::cout << "| "; }
+			if (std::find(vec.begin(), vec.end(), 1) != vec.end()) { std::cout << "1"; }
+			else { std::cout << " "; }
+			if (std::find(vec.begin(), vec.end(), 2) != vec.end()) { std::cout << "2"; }
+			else { std::cout << " "; }
+			if (std::find(vec.begin(), vec.end(), 3) != vec.end()) { std::cout << "3"; }
+			else { std::cout << " "; }
+			std::cout << " | ";
 		}
 		std::cout << '\n';
+
 		for (int j = 1; j <= 9; j++) {
 			vec = cells[i + j];
-			if (vec.size() == 1) { std::cout << std::to_string(vec[0]) + ' ' + std::to_string(vec[0]) + ' ' + std::to_string(vec[0]); }
-			else { std::cout << std::to_string(vec[3]) + ' ' + std::to_string(vec[4]) + ' ' + std::to_string(vec[5]); }
-			if (j == 3 or j == 6) { std::cout << "  |  "; }
-			else { std::cout << "   "; }
+			if (j == 1) { std::cout << "| "; }
+			if (std::find(vec.begin(), vec.end(), 4) != vec.end()) { std::cout << "4"; }
+			else { std::cout << " "; }
+			if (std::find(vec.begin(), vec.end(), 5) != vec.end()) { std::cout << "5"; }
+			else { std::cout << " "; }
+			if (std::find(vec.begin(), vec.end(), 6) != vec.end()) { std::cout << "6"; }
+			else { std::cout << " "; }
+			std::cout << " | ";
 		}
 		std::cout << '\n';
+
 		for (int j = 1; j <= 9; j++) {
 			vec = cells[i + j];
-			if (vec.size() == 1) { std::cout << std::to_string(vec[0]) + ' ' + std::to_string(vec[0]) + ' ' + std::to_string(vec[0]); }
-			else { std::cout << std::to_string(vec[6]) + ' ' + std::to_string(vec[7]) + ' ' + std::to_string(vec[8]); }
-			if (j == 3 or j == 6) { std::cout << "  |  "; }
-			else { std::cout << "   "; }
+			if (j == 1) { std::cout << "| "; }
+			if (std::find(vec.begin(), vec.end(), 7) != vec.end()) { std::cout << "7"; }
+			else { std::cout << " "; }
+			if (std::find(vec.begin(), vec.end(), 8) != vec.end()) { std::cout << "8"; }
+			else { std::cout << " "; }
+			if (std::find(vec.begin(), vec.end(), 9) != vec.end()) { std::cout << "9"; }
+			else { std::cout << " "; }
+			std::cout << " | ";
+
+			if (j == 9) { std::cout << '\n' << "-------------------------------------------------------"; }
 		}
 		std::cout << '\n';
-		if (i == 72) { break; }
-		if (i == 18 or i ==  45) { std::cout << "-------------------------------------------------------------------------" << '\n'; }
-		else { std::cout << "                       |                         |                        " << '\n'; }
-		
 	}
 }
 
 	
-
-
-
-
-		/*
-		std::vector c1 = cells[i + 1];
-		std::vector c2 = cells[i + 2];
-		std::vector c3 = cells[i + 3];
-		std::vector c4 = cells[i + 4];
-		std::vector c5 = cells[i + 5];
-		std::vector c6 = cells[i + 6];
-		std::vector c7 = cells[i + 7];
-		std::vector c8 = cells[i + 8];
-		std::vector c9 = cells[i + 9];
-
-		if (c1.size() == 1) { std::cout << std::to_string(c1[0]) + ' ' + std::to_string(c1[0]) + ' ' + std::to_string(c1[0]) + "    "; }
-		else { std::cout << std::to_string(c1[i]) + ' ' + std::to_string(c1[i + 1]) + ' ' + std::to_string(c1[i + 2]) + "    "; }
-
-		if (c2.size() == 1) { std::cout << std::to_string(c2[0]) + ' ' + std::to_string(c2[0]) + ' ' + std::to_string(c2[0]) + "    "; }
-		else { std::cout << std::to_string(c2[i]) + ' ' + std::to_string(c2[i + 1]) + ' ' + std::to_string(c2[i + 2]) + "    "; }
-
-		if (c3.size() == 1) { std::cout << std::to_string(c3[0]) + ' ' + std::to_string(c3[0]) + ' ' + std::to_string(c3[0]) + "    "; }
-		else { std::cout << std::to_string(c3[i]) + ' ' + std::to_string(c3[i + 1]) + ' ' + std::to_string(c3[i + 2]) + "    "; }
-		
-		if (c4.size() == 1) { std::cout << std::to_string(c4[0]) + ' ' + std::to_string(c4[0]) + ' ' + std::to_string(c4[0]) + "    "; }
-		else { std::cout << std::to_string(c4[i]) + ' ' + std::to_string(c4[i + 1]) + ' ' + std::to_string(c4[i + 2]) + "    "; }
-
-		if (c5.size() == 1) { std::cout << std::to_string(c5[0]) + ' ' + std::to_string(c5[0]) + ' ' + std::to_string(c5[0]) + "    "; }
-		else { std::cout << std::to_string(c5[i]) + ' ' + std::to_string(c5[i + 1]) + ' ' + std::to_string(c5[i + 2]) + "    "; }
-
-		if (c6.size() == 1) { std::cout << std::to_string(c6[0]) + ' ' + std::to_string(c6[0]) + ' ' + std::to_string(c6[0]) + "    "; }
-		else { std::cout << std::to_string(c6[i]) + ' ' + std::to_string(c6[i + 1]) + ' ' + std::to_string(c6[i + 2]) + "    "; }
-
-		if (c7.size() == 1) { std::cout << std::to_string(c7[0]) + ' ' + std::to_string(c7[0]) + ' ' + std::to_string(c7[0]) + "    "; }
-		else { std::cout << std::to_string(c7[i]) + ' ' + std::to_string(c7[i + 1]) + ' ' + std::to_string(c7[i + 2]) + "    "; }
-
-		if (c8.size() == 1) { std::cout << std::to_string(c8[0]) + ' ' + std::to_string(c8[0]) + ' ' + std::to_string(c8[0]) + "    "; }
-		else { std::cout << std::to_string(c8[i]) + ' ' + std::to_string(c8[i + 1]) + ' ' + std::to_string(c8[i + 2]) + "    "; }
-
-		if (c9.size() == 1) { std::cout << std::to_string(c9[0]) + ' ' + std::to_string(c9[0]) + ' ' + std::to_string(c9[0]) + "    "; }
-		else { std::cout << std::to_string(c9[i]) + ' ' + std::to_string(c9[i + 1]) + ' ' + std::to_string(c9[i + 2]) + "    "; }
-		std::cout << '\n';
-		
-
-		
-		
-		if (c1.size() == 1) { std::cout << std::to_string(c1[0]) + ' ' + std::to_string(c1[0]) + ' ' + std::to_string(c1[0]) + "    "; }
-		else { std::cout << std::to_string(c1[i + 3]) + ' ' + std::to_string(c1[i + 4]) + ' ' + std::to_string(c1[i + 5]) + "    "; }
-
-		if (c2.size() == 1) { std::cout << std::to_string(c2[0]) + ' ' + std::to_string(c2[0]) + ' ' + std::to_string(c2[0]) + "    "; }
-		else { std::cout << std::to_string(c2[i + 3]) + ' ' + std::to_string(c2[i + 4]) + ' ' + std::to_string(c2[i + 5]) + "    "; }
-
-		if (c3.size() == 1) { std::cout << std::to_string(c3[0]) + ' ' + std::to_string(c3[0]) + ' ' + std::to_string(c3[0]) + "    "; }
-		else { std::cout << std::to_string(c3[i + 3]) + ' ' + std::to_string(c3[i + 4]) + ' ' + std::to_string(c3[i + 5]) + "    "; }
-
-		if (c1.size() == 1) { std::cout << std::to_string(c1[0]) + ' ' + std::to_string(c1[0]) + ' ' + std::to_string(c1[0]) + "    "; }
-		else { std::cout << std::to_string(c1[i + 6]) + ' ' + std::to_string(c1[i + 7]) + ' ' + std::to_string(c1[i + 8]) + "    "; }
-
-		if (c2.size() == 1) { std::cout << std::to_string(c2[0]) + ' ' + std::to_string(c2[0]) + ' ' + std::to_string(c2[0]) + "    "; }
-		else { std::cout << std::to_string(c2[i + 6]) + ' ' + std::to_string(c2[i + 7]) + ' ' + std::to_string(c2[i + 8]) + "    "; }
-
-		if (c3.size() == 1) { std::cout << std::to_string(c3[0]) + ' ' + std::to_string(c3[0]) + ' ' + std::to_string(c3[0]) + "    "; }
-		else { std::cout << std::to_string(c3[i + 6]) + ' ' + std::to_string(c3[i + 7]) + ' ' + std::to_string(c3[i + 8]) + "    "; }
-
-
-
-*/
-
-	/*	if (r1.size() == 1) { std::cout << std::to_string(r1[0]) + ' '; }
-		else {
-			std::cout << std::to_string(vec[i]) + ' ';
-		}
-		if ((i+1) % 3 == 0) { std::cout << '\n'; }*/
-	
-
-
-
-

@@ -1,4 +1,5 @@
 #include "Puzzle.h"
+#include "Solver.h"
 #include <iostream>
 #include <vector>
 #include <string>
@@ -20,14 +21,14 @@ int main()
         4,8,5, 9,2,1, 6,3,7,
         6,3,1, 5,7,8, 2,9,4 
     };
-   
+
     Puzzle p = Puzzle(vec);
-    
-        
-    p.printPuzzleWithNotes();
-    
-    //for (auto c : p.cells[2])
-    //    std::cout << std::to_string(c) + ' ';
+    Solver s = Solver{ p };
+   
+    s.solve();
+
+
+
 
     return 0;
 }
