@@ -15,8 +15,8 @@ public:
 	std::vector<int> getCell(int cell);
 
 	std::vector<int> getRowIds(int cell);
-	
-	
+	std::vector<int> getColIds(int cell);
+	std::vector<int> getBoxIds(int cell);
 	
 
 	// misc functions

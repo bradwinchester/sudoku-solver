@@ -34,6 +34,24 @@ void Solver::removeNumberFromModule(int cell_id, int value)
 		cell.erase(remove(cell.begin(), cell.end(), value), cell.end());
 		puzzle.updateCell(i, cell);
 	}
+
+	std::vector<int> col = puzzle.getColIds(cell_id);
+	for (int i : col) {
+		if (cell_id == i) { continue; } 
+		std::vector cell = puzzle.getCell(i);
+
+		cell.erase(remove(cell.begin(), cell.end(), value), cell.end());
+		puzzle.updateCell(i, cell);
+	}
+
+	std::vector<int> box = puzzle.getBoxIds(cell_id);
+	for (int i : box) {
+		if (cell_id == i) { continue; } 
+		std::vector cell = puzzle.getCell(i);
+
+		cell.erase(remove(cell.begin(), cell.end(), value), cell.end());
+		puzzle.updateCell(i, cell);
+	}
 }
 
 
