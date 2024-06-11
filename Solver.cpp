@@ -7,14 +7,17 @@ Solver::Solver(Puzzle p)
 {
 }
 
-
 void Solver::solve()
 {
+	int count{};
 	while (!checkIfSolved()) {
 		updateNotes();
 		updateNakedPairs();
+		count++;
+		if (count > 50) { break; }
 	}
-	puzzle.printPuzzleWithNotes();
+	//puzzle.printPuzzleWithNotes();
+	puzzle.printPuzzle();
 }
 
 bool Solver::checkIfSolved()

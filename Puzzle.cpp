@@ -105,22 +105,17 @@ std::vector<int> Puzzle::getBoxIds(int cell)
 	}
 }
 
-
-
-
 void Puzzle::printPuzzle()
 {
 	for (auto const& [key, val] : cells) {
-		
-		std::cout << std::to_string(key) << ' ';
-		/*if (val.size() > 1) {
+		if (val.size() > 1) {
 			std::cout << '0';
 		}
 		else {
 			for (int y : val) {
 				std::cout << std::to_string(y) + " ";
 			}
-		}*/
+		}
 		if (key % 3 == 0) { std::cout << ' '; }
 		if (key % 9 == 0) { std::cout << '\n'; }
 		if (key % 27 == 0) { std::cout << '\n'; }
