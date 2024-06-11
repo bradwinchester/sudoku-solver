@@ -16,9 +16,8 @@ public:
 
 	std::vector<int> getRowIds(int cell);
 	
-	// iterators
-	auto begin() const { return cells.begin(); }
-	auto end() const { return cells.end(); }
+	
+	
 
 	// misc functions
 	void printPuzzle();
@@ -26,6 +25,5 @@ public:
 
 private:
 	std::map<int, std::vector<int>> cells{};
-
 };
 

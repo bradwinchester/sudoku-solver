@@ -15,25 +15,24 @@ void Solver::solve()
 
 void Solver::updateNotes()
 {
-	std::vector<int> n = { 2,4 };
-	puzzle.updateCell(2, n);
-	/*for (auto [key, value] : puzzle) {
-		if (value.size() == 1) {
-			int num = value[0];
-			removeNumberFromModule(key, num);
+	for (int i = 1; i <= 81; i++) {
+		auto cell = puzzle.getCell(i);
+		if (cell.size() == 1) {
+			int num = cell[0];
+			removeNumberFromModule(i, num);
 		}
-	}*/
+	}
 }
 
 void Solver::removeNumberFromModule(int cell_id, int value)
 {
-	std::vector<int> row = getRowIds(cell_id);
+	std::vector<int> row = puzzle.getRowIds(cell_id);
 	for (int i : row) {
 		if (cell_id == i) { continue; } // don't remove own value from row
-		std::vector cell = getCell(i);
+		std::vector cell = puzzle.getCell(i);
 		
 		cell.erase(remove(cell.begin(), cell.end(), value), cell.end());
-		updateCell(cell_id, cell);
+		puzzle.updateCell(i, cell);
 	}
 }
 

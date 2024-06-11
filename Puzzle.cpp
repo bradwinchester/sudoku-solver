@@ -48,6 +48,8 @@ std::vector<int> Puzzle::getRowIds(int cell)
 	return { 0 };
 }
 
+
+
 void Puzzle::printPuzzle()
 {
 	for (auto const& [key, val] : cells) {
@@ -69,7 +71,7 @@ void Puzzle::printPuzzleWithNotes()
 {
 	std::cout << "-------------------------------------------------------" << '\n';
 	std::vector<int> vec{};
-	for (int i = 0; i < 81; i += 9) {  				
+	for (int i = 0; i < 81; i += 9) {				
 		for (int j = 1; j <= 9; j++) {
 			vec = cells[i + j];
 			if (j == 1) { std::cout << "| "; }
@@ -111,6 +113,7 @@ void Puzzle::printPuzzleWithNotes()
 		}
 		std::cout << '\n';
 	}
+	std::cout << '\n';
 }
 
 	

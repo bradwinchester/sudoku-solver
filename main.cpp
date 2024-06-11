@@ -9,7 +9,7 @@
 int main()
 {
     std::vector<int> vec = {
-        0,6,3, 7,5,2, 9,4,3,
+        8,6,3, 7,5,2, 9,4,1,
         1,9,4, 8,3,6, 7,5,2,
         2,5,7, 4,1,9, 8,6,3,
 
@@ -26,8 +26,6 @@ int main()
     Solver s = Solver{ p };
    
     s.solve();
-
-
 
 
     return 0;
