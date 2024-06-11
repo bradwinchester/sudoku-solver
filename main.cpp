@@ -25,6 +25,8 @@ int main()
     Puzzle p = Puzzle(vec);
     Solver s = Solver{ p };
    
+    
+    //std::cout << 19 % 9;
     s.solve();
 
 

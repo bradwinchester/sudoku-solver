@@ -1,5 +1,7 @@
 #include "Solver.h"
 #include "Puzzle.h"
+#include <iostream>
+#include <string>
 
 // constructor
 Solver::Solver(Puzzle p) 
@@ -10,6 +12,8 @@ Solver::Solver(Puzzle p)
 void Solver::solve()
 {
 	updateNotes();
+	updateNakedPairs();
+
 	puzzle.printPuzzleWithNotes();
 }
 
@@ -53,6 +57,61 @@ void Solver::removeNumberFromModule(int cell_id, int value)
 		puzzle.updateCell(i, cell);
 	}
 }
+
+void Solver::updateNakedPairs()
+{
+	for (int i = 1; i <= 81; i++) {
+		std::vector c1 = puzzle.getCell(i);
+		
+		std::vector<int> row = puzzle.getRowIds(i);
+		for (int j : row) {
+			if (i == j) { continue; }
+			
+			std::vector c2 = puzzle.getCell(j);
+			if ((c1 == c2) and (c1.size() == 2)) { // if they are a matching pair
+				removeNakedPairs(i, j, c1, row); // remove that pair from the other cells in row
+			}
+		}
+
+		std::vector<int> col = puzzle.getColIds(i);
+		for (int j : col) {
+			if (i == j) { continue; }
+
+			std::vector c2 = puzzle.getCell(j);
+			if ((c1 == c2) and (c1.size() == 2)) { 
+				removeNakedPairs(i, j, c1, col);
+			}
+		}
+
+		std::vector<int> box = puzzle.getBoxIds(i);
+		for (int j : box) {
+			if (i == j) { continue; }
+
+			std::vector c2 = puzzle.getCell(j);
+			if ((c1 == c2) and (c1.size() == 2)) {
+				removeNakedPairs(i, j, c1, box);
+			}
+		}
+	}
+}
+
+void Solver::removeNakedPairs(int p1, int p2, std::vector<int> pair, std::vector<int> module)
+{
+	for (auto i : module) {
+		if (i != p1 and i != p2) {
+			std::vector<int> cell = puzzle.getCell(i);
+			cell.erase(remove(cell.begin(), cell.end(), pair[0]), cell.end());
+			cell.erase(remove(cell.begin(), cell.end(), pair[1]), cell.end());
+			puzzle.updateCell(i, cell);
+		}
+	}
+}
+
+
+
+
+
+
 
 
 
