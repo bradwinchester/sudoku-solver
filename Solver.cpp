@@ -1,7 +1,5 @@
 #include "Solver.h"
 #include "Puzzle.h"
-#include <iostream>
-#include <string>
 
 // constructor
 Solver::Solver(Puzzle p) 
@@ -9,12 +7,26 @@ Solver::Solver(Puzzle p)
 {
 }
 
+
 void Solver::solve()
 {
-	updateNotes();
-	updateNakedPairs();
-
+	while (!checkIfSolved()) {
+		updateNotes();
+		updateNakedPairs();
+	}
 	puzzle.printPuzzleWithNotes();
+}
+
+bool Solver::checkIfSolved()
+{
+	bool filled = true;
+	for (int i = 1; i <= 81; i++) {
+		auto cell = puzzle.getCell(i);
+		if (cell.size() > 1) { filled = false; }
+	}
+	if (filled) { return true; }
+	else { return false; }
+
 }
 
 void Solver::updateNotes()

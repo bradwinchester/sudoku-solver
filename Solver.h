@@ -7,6 +7,7 @@ public:
 	Solver(Puzzle p);
 
 	void solve();
+	bool checkIfSolved();
 	void updateNotes();
 	void removeNumberFromModule(int cell_id, int value);
 	void updateNakedPairs();
