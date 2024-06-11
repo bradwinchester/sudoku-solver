@@ -12,7 +12,11 @@ public:
 	
 	// setters & getters
 	void updateCell(int cell, std::vector<int> nums);
-	std::vector<int> getCell(int cell);
+	const std::vector<int>& getCell(int cell);
+
+	std::map<int, std::vector<int>> getRow(int n);
+	std::map<int, std::vector<int>> getCol(int n);
+	std::map<int, std::vector<int>> getBox(int n);
 
 	std::vector<int> getRowIds(int cell);
 	std::vector<int> getColIds(int cell);

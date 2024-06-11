@@ -1,5 +1,7 @@
 #include "Solver.h"
 #include "Puzzle.h"
+#include <iostream>
+#include <algorithm>
 
 // constructor
 Solver::Solver(Puzzle p) 
@@ -16,20 +18,70 @@ void Solver::solve()
 		count++;
 		if (count > 50) { break; }
 	}
-	//puzzle.printPuzzleWithNotes();
-	puzzle.printPuzzle();
+	puzzle.printPuzzleWithNotes();
+	
 }
 
+// checks if the puzzle is solved with a valid solution
 bool Solver::checkIfSolved()
 {
-	bool filled = true;
-	for (int i = 1; i <= 81; i++) {
-		auto cell = puzzle.getCell(i);
-		if (cell.size() > 1) { filled = false; }
-	}
-	if (filled) { return true; }
-	else { return false; }
+	for (int i = 1; i <= 9; i++) { 
+		std::vector<int> row{};
+		std::map<int, std::vector<int>> r = puzzle.getRow(i);
 
+		for (auto const& [key, val] : r) {
+			row.insert(row.end(), val.begin(), val.end());
+		}
+		
+		if (row.size() > 9) { return false; } 
+
+		std::sort(row.begin(), row.end());
+		std::vector<int> nums = { 1,2,3,4,5,6,7,8,9 };
+
+		if (row != nums) {
+			std::cout << "Invalid Solution!";
+			return false;
+		}
+	}
+
+	for (int i = 1; i <= 9; i++) {
+		std::vector<int> col{};
+		std::map<int, std::vector<int>> c = puzzle.getCol(i);
+
+		for (auto const& [key, val] : c) {
+			col.insert(col.end(), val.begin(), val.end());
+		}
+
+		if (col .size() > 9) { return false; }
+
+		std::sort(col.begin(), col.end());
+		std::vector<int> nums = { 1,2,3,4,5,6,7,8,9 };
+
+		if (col != nums) {
+			std::cout << "Invalid Solution!";
+			return false;
+		}
+	}
+
+	for (int i = 1; i <= 9; i++) {
+		std::vector<int> box{};
+		std::map<int, std::vector<int>> b = puzzle.getBox(i);
+
+		for (auto const& [key, val] : b) {
+			box.insert(box.end(), val.begin(), val.end());
+		}
+
+		if (box.size() > 9) { return false; }
+
+		std::sort(box.begin(), box.end());
+		std::vector<int> nums = { 1,2,3,4,5,6,7,8,9 };
+
+		if (box != nums) {
+			std::cout << "Invalid Solution!";
+			return false;
+		}
+	}
+	return true;
 }
 
 void Solver::updateNotes()

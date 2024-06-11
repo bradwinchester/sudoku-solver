@@ -29,13 +29,51 @@ void Puzzle::updateCell(int cell, std::vector<int> nums)
 	cells[cell] = nums;
 }
 
-std::vector<int> Puzzle::getCell(int cell)
+const std::vector<int>& Puzzle::getCell(int cell)
 {
 	return cells[cell];
 }
 
+std::map<int, std::vector<int>> Puzzle::getRow(int n)
+{
+	std::vector<int> row_ids = getRowIds(n);
+	std::map<int, std::vector<int>> row{};
+	
+	for (int i : row_ids) {
+		row[i] = cells[i];
+	}
+	return row;
+}
+
+std::map<int, std::vector<int>> Puzzle::getCol(int n)
+{
+	std::vector<int> col_ids = getColIds(n);
+	std::map<int, std::vector<int>> col{};
+
+	for (int i : col_ids) {
+		col[i] = cells[i];
+	}
+	return col;
+}
+
+std::map<int, std::vector<int>> Puzzle::getBox(int n)
+{
+	std::vector<int> box_ids = getBoxIds(n);
+	std::map<int, std::vector<int>> box{};
+
+	for (int i : box_ids) {
+		box[i] = cells[i];
+	}
+	return box;
+}
+
+
+
+
+
+
 // returns the ids for all cells in a cell's row
-std::vector<int> Puzzle::getRowIds(int cell)
+std::vector<int> Puzzle::getRowIds(int cell) 
 {
 	if (cell >= 1 and cell <= 9) { return { 1,2,3,4,5,6,7,8,9 }; }
 	if (cell >= 10 and cell <= 18) { return { 10,11,12,13,14,15,16,17,18 }; }
