@@ -9,6 +9,8 @@ Solver::Solver(Puzzle p)
 {
 }
 
+// iteratively attempts to solve the puzzle using the algorithms
+// stops after 100 iterations
 void Solver::solve()
 {
 	int count{};
@@ -16,10 +18,9 @@ void Solver::solve()
 		updateNotes();
 		updateNakedPairs();
 		count++;
-		if (count > 50) { break; }
+		if (count > 100) { break; } // prevents infinite loop
 	}
 	puzzle.printPuzzleWithNotes();
-	
 }
 
 // checks if the puzzle is solved with a valid solution
@@ -84,6 +85,7 @@ bool Solver::checkIfSolved()
 	return true;
 }
 
+// removes the already solved cells as a possibility from the relevant modules
 void Solver::updateNotes()
 {
 	for (int i = 1; i <= 81; i++) {
@@ -95,6 +97,7 @@ void Solver::updateNotes()
 	}
 }
 
+// removes a solved cell from each module it is a part of 
 void Solver::removeNumberFromModule(int cell_id, int value)
 {
 	std::vector<int> row = puzzle.getRowIds(cell_id);
@@ -125,6 +128,7 @@ void Solver::removeNumberFromModule(int cell_id, int value)
 	}
 }
 
+// searches for matching pairs, and removes those possibilites from the other cells in it's module
 void Solver::updateNakedPairs()
 {
 	for (int i = 1; i <= 81; i++) {
@@ -136,7 +140,7 @@ void Solver::updateNakedPairs()
 			
 			std::vector c2 = puzzle.getCell(j);
 			if ((c1 == c2) and (c1.size() == 2)) { // if they are a matching pair
-				removeNakedPairs(i, j, c1, row); // remove that pair from the other cells in row
+				removeNakedPair(i, j, c1, row); // remove that pair from the other cells in row
 			}
 		}
 
@@ -146,7 +150,7 @@ void Solver::updateNakedPairs()
 
 			std::vector c2 = puzzle.getCell(j);
 			if ((c1 == c2) and (c1.size() == 2)) { 
-				removeNakedPairs(i, j, c1, col);
+				removeNakedPair(i, j, c1, col);
 			}
 		}
 
@@ -156,13 +160,14 @@ void Solver::updateNakedPairs()
 
 			std::vector c2 = puzzle.getCell(j);
 			if ((c1 == c2) and (c1.size() == 2)) {
-				removeNakedPairs(i, j, c1, box);
+				removeNakedPair(i, j, c1, box);
 			}
 		}
 	}
 }
 
-void Solver::removeNakedPairs(int p1, int p2, std::vector<int> pair, std::vector<int> module)
+// removes the numbers in a matching pair from every cell in the module, except the cells the pair is 
+void Solver::removeNakedPair(int p1, int p2, std::vector<int> pair, std::vector<int> module)
 {
 	for (auto i : module) {
 		if (i != p1 and i != p2) {
@@ -173,6 +178,10 @@ void Solver::removeNakedPairs(int p1, int p2, std::vector<int> pair, std::vector
 		}
 	}
 }
+
+
+
+
 
 
 

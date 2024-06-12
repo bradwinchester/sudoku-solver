@@ -13,7 +13,7 @@ Puzzle::Puzzle(std::vector<int> data)
 	for (int i = 1; i <= 81; i++) {
 		std::vector<int> cell {};
 		if (data[i - 1] == 0) {
-			cell = { 1,2,3,4,5,6,7,8,9 };
+			cell = { 1,2,3,4,5,6,7,8,9 }; // if cell is empty, set all possibilities
 		}
 		else {
 			cell = { data[i - 1] };
@@ -66,11 +66,6 @@ std::map<int, std::vector<int>> Puzzle::getBox(int n)
 	}
 	return box;
 }
-
-
-
-
-
 
 // returns the ids for all cells in a cell's row
 std::vector<int> Puzzle::getRowIds(int cell) 
