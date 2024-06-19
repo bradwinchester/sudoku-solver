@@ -24,8 +24,6 @@ int main()
         0,0,0, 0,0,0, 0,0,0 };
         */
 
- 
-
     // hidden triples
     std::vector<int> vec = {
     0,0,0, 0,0,1, 0,3,0,
