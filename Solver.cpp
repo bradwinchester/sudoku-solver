@@ -24,7 +24,7 @@ void Solver::solve()
 		updateNakedPairs();
 		updateNakedTriples();
 
-		updateHiddenPairs();
+		//updateHiddenPairs();
 		updateHiddenTriples();
 
 		count++;
@@ -38,10 +38,10 @@ bool Solver::isSolved()
 {
 	std::vector<int> nums = { 1,2,3,4,5,6,7,8,9 }; 
 	
-	bool rows_solved = false;
-	std::vector<int> row{};
+	std::vector<int> rows_solved{};
 	for (int i = 1; i <= 73; i += 9) {
 		std::vector<int> row_ids = puzzle.getRowIds(i);
+		std::vector<int> row{};
 
 		for (int j : row_ids) {
 			std::vector<int> cell = puzzle.getCell(j);
@@ -55,19 +55,21 @@ bool Solver::isSolved()
 			}
 			if (cell.size() == 1) { row.push_back(cell[0]); }
 		}
+		std::sort(row.begin(), row.end());
+		if ((row.size() == 9) and (row != nums)) {
+			if (output) { std::cout << "Invalid Solution!" << '\n'; }
+			return false;
+		}
+		if ((row.size() == 9) and (row == nums)) {
+			rows_solved.push_back(i);
+		}
 	}
-	std::sort(row.begin(), row.end());
-	if ((row.size() == 9) and (row != nums)) {
-		if (output) { std::cout << "Invalid Solution!" << '\n'; }
-		return false;
-	}
-	rows_solved = true; 
+	
 
-
-	bool cols_solved = false;
-	std::vector<int> col{};
+	std::vector<int> cols_solved{};
 	for (int i = 1; i <= 9; i++) {
 		std::vector<int> col_ids = puzzle.getColIds(i);
+		std::vector<int> col{};
 
 		for (int j : col_ids) {
 			std::vector<int> cell = puzzle.getCell(j);
@@ -81,22 +83,22 @@ bool Solver::isSolved()
 			}
 			if (cell.size() == 1) { col.push_back(cell[0]); }
 		}
-		
-		
+		std::sort(col.begin(), col.end());
+		if ((col.size() == 9) and (col != nums)) {
+			if (output) { std::cout << "Invalid Solution!" << '\n'; }
+			return false;
+		}
+		if ((col.size() == 9) and (col == nums)) {
+			cols_solved.push_back(i);
+		}
 	}
-	std::sort(col.begin(), col.end());
-	if ((col.size() == 9) and (col != nums)) {
-		if (output) { std::cout << "Invalid Solution!" << '\n'; }
-		return false;
-	}
-	cols_solved = true;
 	
 	
-	bool boxs_solved = false;
-	std::vector<int> box{};
+	std::vector<int> boxs_solved{};
 	std::vector<int> ids = { 1, 4, 7, 28, 31, 34, 55, 58, 61 };
 	for (auto i : ids) {
 		std::vector<int> box_ids = puzzle.getBoxIds(i);
+		std::vector<int> box{};
 
 		for (int j : box_ids) {
 			std::vector<int> cell = puzzle.getCell(j);
@@ -110,21 +112,25 @@ bool Solver::isSolved()
 			}
 			if (cell.size() == 1) { box.push_back(cell[0]); }
 		}
+		std::sort(box.begin(), box.end());
+		if ((box.size() == 9) and (box != nums)) {
+			if (output) { std::cout << "Invalid Solution!" << '\n'; }
+			return false;
+		}
+		if ((box.size() == 9) and (box == nums)) {
+			boxs_solved.push_back(i);
+		}
 	}
-	std::sort(box.begin(), box.end());
-	if ((box.size() == 9) and (box != nums)) {
-		if (output) { std::cout << "Invalid Solution!" << '\n'; }
-		return false;
-	}
-	boxs_solved = true; 
 	
 
-	if (rows_solved and cols_solved and boxs_solved) {
+	if ((rows_solved.size() == 9) and (cols_solved.size() == 9) and (boxs_solved.size() == 9)){
 		if (output) { std::cout << "Puzzle Solved!" << '\n'; }
 		return true;
 	}
 	else {
-		if (output) { std::cout << "Puzzle not yet solved..." << '\n'; }
+		if (output) { 
+			std::cout << "Puzzle not yet solved..." << '\n'; 
+		}
 		return false;
 	}
 }
@@ -368,13 +374,14 @@ void Solver::isolateHiddenPairs(int index, std::string mod_type)
 			if (key1 == key2) { continue; } // don't compare a cell to itself
 			
 			std::vector<int> pair{};
-			if (val1 == val2) { // if it is a hidden pair, update the possibilities to be only that pair in each cell
+
+			if ((val1 == val2) and val2.size() == 2) { // if it is a hidden pair, update the possibilities to be only that pair in each cell
 				pair.push_back(key1);
 				pair.push_back(key2);
+				std::sort(pair.begin(), pair.end());
 				puzzle.updateCell(val2[0], pair);
-				puzzle.updateCell(val2[1], pair);
-
-				if (output) { std::cout << "hidden pair " << pair[0] << '+' << pair[1] << " isolated in cell " << val2[0] << '\n'; }
+		
+				if (output) { std::cout << "hidden pair " << pair[0] << "+" << pair[1] << " isolated in cell " << val2[0] << '\n'; }
 			}
 		}
 	}
