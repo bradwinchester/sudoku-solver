@@ -24,7 +24,7 @@ void Solver::solve()
 		updateNakedPairs();
 		updateNakedTriples();
 
-		//updateHiddenPairs();
+		updateHiddenPairs();
 		updateHiddenTriples();
 
 		count++;
@@ -356,32 +356,37 @@ void Solver::isolateHiddenPairs(int index, std::string mod_type)
 	std::map<int, std::vector<int>> found_idx{}; // records the index each time a number occurs, for every number in the module
 	for (int i : module) {
 		std::vector<int> cell = puzzle.getCell(i);
-		if (cell.size() > 1) {
-			for (int j : cell) {
-				found_idx[j].push_back(i);
-			}
+		for (int j : cell) {
+			found_idx[j].push_back(i);
 		}
 	}
-	for (auto it = found_idx.begin(); it != found_idx.end();) 
-	{
-		if (it->second.size() != 2) // remove any numbers that don't occur exactly twice, since they cannot be part of a pair
-			it = found_idx.erase(it);
-		else
-			++it;
-	}
+	
 	for (auto const& [key1, val1] : found_idx) {
 		for (auto const& [key2, val2] : found_idx) {
 			if (key1 == key2) { continue; } // don't compare a cell to itself
 			
-			std::vector<int> pair{};
+			std::vector<int> v1 = val1;
+			std::vector<int> v2 = val2;
+			std::sort(v1.begin(), v1.end());
+			std::sort(v2.begin(), v2.end());
 
-			if ((val1 == val2) and val2.size() == 2) { // if it is a hidden pair, update the possibilities to be only that pair in each cell
+			if ((v1 == v2) and (v2.size() == 2)) { // if it is a hidden pair, update the possibilities to be only that pair in each cell
+				std::vector<int> pair{};
 				pair.push_back(key1);
 				pair.push_back(key2);
 				std::sort(pair.begin(), pair.end());
-				puzzle.updateCell(val2[0], pair);
-		
-				if (output) { std::cout << "hidden pair " << pair[0] << "+" << pair[1] << " isolated in cell " << val2[0] << '\n'; }
+				
+				std::vector<int> c1 = puzzle.getCell(v1[0]);
+				if (c1.size() > 2) {
+					puzzle.updateCell(v1[0], pair);
+					if (output) { std::cout << "hidden pair " << pair[0] << "+" << pair[1] << " isolated in cell " << v1[0] << '\n'; }
+				}
+
+				std::vector<int> c2 = puzzle.getCell(v1[1]);
+				if (c2.size() > 2) {
+					puzzle.updateCell(v1[1], pair);
+					if (output) { std::cout << "hidden pair " << pair[0] << "+" << pair[1] << " isolated in cell " << v1[1] << '\n'; }
+				}
 			}
 		}
 	}
@@ -447,7 +452,6 @@ void Solver::isolateHiddenTriples(int index, std::string mod_type)
 					updated_cell.push_back(num);
 				}
 			}
-			//if ((updated_cell.size() != 0) and (updated_cell.size() != cell.size())) {
 			if (updated_cell.size() != 0) {
 				puzzle.updateCell(i, updated_cell);
 				
