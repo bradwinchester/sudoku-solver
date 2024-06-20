@@ -17,17 +17,16 @@ public:
 	void findNakedPairs(int index, std::string mod_type);
 	void removeNakedPair(int p1, int p2, std::vector<int> pair, std::vector<int> module);
 	
-	//void updateNakedTriples(std::string mod_type);
-	//void removeNakedTriplets(int i, int j, int k, std::set<int> s, std::vector<int> module);
 	void updateNakedTriples();
 	void removeNakedTriples(int index, std::string mod_type);
 
-	
 	void updateHiddenPairs();
 	void isolateHiddenPairs(int index, std::string mod_type);
 	
 	void updateHiddenTriples();
 	void isolateHiddenTriples(int index, std::string mod_type);
+
+
 
 private:
 	Puzzle puzzle{};

@@ -11,8 +11,10 @@ Solver::Solver(Puzzle p)
 {
 }
 
+// enable or disable text based output of the solver
+bool output = true;
+
 // iteratively attempts to solve the puzzle using the algorithms
-// stops after 100 iterations
 void Solver::solve()
 {
 	int count{};
@@ -36,44 +38,62 @@ bool Solver::isSolved()
 {
 	std::vector<int> nums = { 1,2,3,4,5,6,7,8,9 }; 
 	
-	bool row_solved = false;
-	std::vector<int> row;
+	bool rows_solved = false;
+	std::vector<int> row{};
 	for (int i = 1; i <= 73; i += 9) {
 		std::vector<int> row_ids = puzzle.getRowIds(i);
 
 		for (int j : row_ids) {
 			std::vector<int> cell = puzzle.getCell(j);
 			if (cell.empty()) {
-				std::cout << "Error! Cell " << j << "is blank!" << '\n';
+				if (output) { std::cout << "Error! Cell " << j << " is blank!" << '\n'; }
 				return false;
 			}
-			
-			row.push_back(cell[0]);
+			if (cell.size() > 1) {
+				if (output) { std::cout << "Puzzle not yet solved. Cell " << j << " is incomplete." << '\n'; }
+				return false;
+			}
+			if (cell.size() == 1) { row.push_back(cell[0]); }
 		}
 	}
 	std::sort(row.begin(), row.end());
-	if (row == nums) { row_solved = true; }
+	if ((row.size() == 9) and (row != nums)) {
+		if (output) { std::cout << "Invalid Solution!" << '\n'; }
+		return false;
+	}
+	rows_solved = true; 
 
-	bool col_solved = false;
-	std::vector<int> col;
+
+	bool cols_solved = false;
+	std::vector<int> col{};
 	for (int i = 1; i <= 9; i++) {
 		std::vector<int> col_ids = puzzle.getColIds(i);
 
 		for (int j : col_ids) {
 			std::vector<int> cell = puzzle.getCell(j);
 			if (cell.empty()) {
-				std::cout << "Error! Cell " << j << "is blank!" << '\n';
+				if (output) { std::cout << "Error! Cell " << j << " is blank!" << '\n'; }
 				return false;
 			}
-			
-			col.push_back(cell[0]);
+			if (cell.size() > 1) {
+				if (output) { std::cout << "Puzzle not yet solved. Cell " << j << " is incomplete." << '\n'; }
+				return false;
+			}
+			if (cell.size() == 1) { col.push_back(cell[0]); }
 		}
+		
+		
 	}
 	std::sort(col.begin(), col.end());
-	if (col == nums) { col_solved = true; }
-
-	bool box_solved = false;
-	std::vector<int> box;
+	if ((col.size() == 9) and (col != nums)) {
+		if (output) { std::cout << "Invalid Solution!" << '\n'; }
+		return false;
+	}
+	cols_solved = true;
+	
+	
+	bool boxs_solved = false;
+	std::vector<int> box{};
 	std::vector<int> ids = { 1, 4, 7, 28, 31, 34, 55, 58, 61 };
 	for (auto i : ids) {
 		std::vector<int> box_ids = puzzle.getBoxIds(i);
@@ -81,21 +101,30 @@ bool Solver::isSolved()
 		for (int j : box_ids) {
 			std::vector<int> cell = puzzle.getCell(j);
 			if (cell.empty()) {
-				std::cout << "Error! Cell " << j << "is blank!" << '\n';
+				if (output) { std::cout << "Error! Cell " << j << " is blank!" << '\n'; }
 				return false;
 			}
-			
-			box.push_back(cell[0]);
+			if (cell.size() > 1) {
+				if (output) { std::cout << "Puzzle not yet solved. Cell " << j << " is incomplete." << '\n'; }
+				return false;
+			}
+			if (cell.size() == 1) { box.push_back(cell[0]); }
 		}
 	}
 	std::sort(box.begin(), box.end());
-	if (box == nums) { box_solved = true; }
+	if ((box.size() == 9) and (box != nums)) {
+		if (output) { std::cout << "Invalid Solution!" << '\n'; }
+		return false;
+	}
+	boxs_solved = true; 
 	
-	if (row_solved and col_solved and box_solved) {
-		std::cout << "Puzzle Solved!" << '\n';
+
+	if (rows_solved and cols_solved and boxs_solved) {
+		if (output) { std::cout << "Puzzle Solved!" << '\n'; }
 		return true;
 	}
 	else {
+		if (output) { std::cout << "Puzzle not yet solved..." << '\n'; }
 		return false;
 	}
 }
@@ -124,7 +153,8 @@ void Solver::removeNumberFromModule(int cell_id, int value)
 		if (std::find(cell.begin(), cell.end(), value) != cell.end()) { // if number is found in the cell
 			cell.erase(remove(cell.begin(), cell.end(), value), cell.end()); // remove it and update the cell
 			puzzle.updateCell(i, cell);
-			std::cout << "updated notes: " << value << " removed from cell " << i << " : row" << '\n';
+
+			if (output) { std::cout << "updated notes: " << value << " removed from cell " << i << " : row" << '\n'; }
 		}
 	}
 
@@ -137,7 +167,8 @@ void Solver::removeNumberFromModule(int cell_id, int value)
 		if (std::find(cell.begin(), cell.end(), value) != cell.end()) {
 			cell.erase(remove(cell.begin(), cell.end(), value), cell.end());
 			puzzle.updateCell(i, cell);
-			std::cout << "updated notes: " << value << " removed from cell " << i << " : col" << '\n';
+			
+			if (output) { std::cout << "updated notes: " << value << " removed from cell " << i << " : col" << '\n'; }
 		}
 	}
 
@@ -150,7 +181,8 @@ void Solver::removeNumberFromModule(int cell_id, int value)
 		if (std::find(cell.begin(), cell.end(), value) != cell.end()) {
 			cell.erase(remove(cell.begin(), cell.end(), value), cell.end());
 			puzzle.updateCell(i, cell);
-			std::cout << "updated notes: " << value << " removed from cell " << i << " : box" << '\n';
+			
+			if (output) { std::cout << "updated notes: " << value << " removed from cell " << i << " : box" << '\n'; }
 		}
 	}
 }
@@ -211,8 +243,9 @@ void Solver::removeNakedPair(int p1, int p2, std::vector<int> pair, std::vector<
 		std::set_difference(cell.begin(), cell.end(), pair.begin(), pair.end(), std::inserter(updated, updated.begin()));
 		
 		if (updated.size() != 0) {
+			
+			if (output) { std::cout << "naked pair " << pair[0] << "+" << pair[1] << " removed in cell " << i << '\n'; }
 			puzzle.updateCell(i, updated);
-			std::cout << "naked pair " << pair[0] << "+" << pair[1] << " removed in cell " << i << '\n';
 		}
 		else { continue; }		
 	}
@@ -275,7 +308,8 @@ void Solver::removeNakedTriples(int index, std::string mod_type) // the world's 
 											if (std::find(cell.begin(), cell.end(), y) != cell.end()) { // if a number in the triplet found 
 												cell.erase(remove(cell.begin(), cell.end(), y), cell.end()); // remove it 
 												puzzle.updateCell(x, cell); 
-												std::cout << "naked triple " << vec[0] << '+' << vec[1] << "+" << vec[2] << " removed: " << y << " in cell " << x << '\n';
+
+												if (output) { std::cout << "naked triple " << vec[0] << '+' << vec[1] << "+" << vec[2] << " removed: " << y << " in cell " << x << '\n'; }
 											}
 										}
 									}
@@ -339,7 +373,8 @@ void Solver::isolateHiddenPairs(int index, std::string mod_type)
 				pair.push_back(key2);
 				puzzle.updateCell(val2[0], pair);
 				puzzle.updateCell(val2[1], pair);
-				std::cout << "hidden pair " << pair[0] << '+' << pair[1] << " isolated in cell " << val2[0]  << '\n';
+
+				if (output) { std::cout << "hidden pair " << pair[0] << '+' << pair[1] << " isolated in cell " << val2[0] << '\n'; }
 			}
 		}
 	}
@@ -405,9 +440,11 @@ void Solver::isolateHiddenTriples(int index, std::string mod_type)
 					updated_cell.push_back(num);
 				}
 			}
+			//if ((updated_cell.size() != 0) and (updated_cell.size() != cell.size())) {
 			if (updated_cell.size() != 0) {
 				puzzle.updateCell(i, updated_cell);
-				std::cout << "hidden triple " << triplet[0] << '+' << triplet[1] << "+" << triplet[2] << " isolated in cell " << i << '\n';
+				
+				if (output) { std::cout << "hidden triple " << triplet[0] << '+' << triplet[1] << "+" << triplet[2] << " isolated in cell " << i << '\n'; }
 			}
 		}
 	}
