@@ -6,7 +6,7 @@
 class Solver : public Puzzle
 {
 public:
-	Solver(Puzzle p);
+	Solver(Puzzle p, bool output);
 
 	void solve();
 	bool isSolved();
@@ -26,9 +26,11 @@ public:
 	void updateHiddenTriples();
 	void isolateHiddenTriples(int index, std::string mod_type);
 
-
+	void updatePointingCells();
+	void removePointingCells(int index, std::string mod_type);
 
 private:
 	Puzzle puzzle{};
+	bool output{};
 };
 

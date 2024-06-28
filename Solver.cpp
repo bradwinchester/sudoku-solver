@@ -6,19 +6,20 @@
 #include <string>
 
 // constructor
-Solver::Solver(Puzzle p) 
-	: puzzle { p }
+Solver::Solver(Puzzle p, bool o) 
+	: puzzle { p }, output { o }
 {
 }
 
 // enable or disable text based output of the solver
-bool output = true;
+//bool output = true;
 
 // iteratively attempts to solve the puzzle using the algorithms
 void Solver::solve()
 {
 	int count{};
 	while (!isSolved()) {
+		if (count > 10) { break; } // prevents infinite loop
 		updateNotes();
 		
 		updateNakedPairs();
@@ -28,7 +29,6 @@ void Solver::solve()
 		updateHiddenTriples();
 
 		count++;
-		if (count > 10) { break; } // prevents infinite loop
 	}
 	puzzle.printPuzzleWithNotes();
 }
@@ -128,9 +128,7 @@ bool Solver::isSolved()
 		return true;
 	}
 	else {
-		if (output) { 
-			std::cout << "Puzzle not yet solved..." << '\n'; 
-		}
+		if (output) { std::cout << "Puzzle not yet solved..." << '\n'; }
 		return false;
 	}
 }
@@ -395,15 +393,15 @@ void Solver::isolateHiddenPairs(int index, std::string mod_type)
 // iterates through every module to find hidden triples 
 void Solver::updateHiddenTriples()
 {
-	for (int i = 1; i <= 73; i += 9) {
+	for (int i = 1; i <= 73; i += 9) { // first id of each row 
 		isolateHiddenTriples(i, "row");
 	}
 
-	for (int i = 1; i <= 9; i++) {
+	for (int i = 1; i <= 9; i++) { // first id of each col
 		isolateHiddenTriples(i, "col");
 	}
 
-	std::vector<int> box_ids = { 1, 4, 7, 28, 31, 34, 55, 58, 61 };
+	std::vector<int> box_ids = { 1, 4, 7, 28, 31, 34, 55, 58, 61 }; // first id of each box
 	for (auto i : box_ids) {
 		isolateHiddenTriples(i, "box");
 	}
@@ -459,4 +457,36 @@ void Solver::isolateHiddenTriples(int index, std::string mod_type)
 			}
 		}
 	}
+}
+
+// iterates through every row and column to find pointing pairs and triples
+void Solver::updatePointingCells()
+{
+	for (int i = 1; i <= 73; i += 9) { // first id of each row 
+		isolateHiddenTriples(i, "row");
+	}
+
+	for (int i = 1; i <= 9; i++) { // first id of each col
+		isolateHiddenTriples(i, "col");
+	}
+}
+
+void Solver::removePointingCells(int index, std::string mod_type)
+{
+	std::vector<int> module{};
+	if (mod_type == "row") { module = puzzle.getRowIds(index); }
+	if (mod_type == "col") { module = puzzle.getColIds(index); }
+	
+	std::map<int, std::vector<int>> found_idx{}; // records the index each time a number occurs, for every number in the module
+	for (int i : module) {
+		std::vector<int> cell = puzzle.getCell(i);
+		if (cell.size() > 1) {
+			for (int j : cell) {
+				found_idx[j].push_back(i);
+			}
+		}
+	}
+	
+
+
 }
