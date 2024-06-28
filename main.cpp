@@ -24,7 +24,7 @@ int main()
         0,0,0, 0,0,0, 0,0,0 };
        
        */
-
+    
 
     // intersection removal
     std::vector<int> vec = {
@@ -45,6 +45,7 @@ int main()
     
     // enable or disable descriptive output of the solver
     bool output = true; 
+    //bool output = false; 
 
     Solver s = Solver{ p, output };
     s.solve();

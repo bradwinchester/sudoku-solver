@@ -11,9 +11,6 @@ Solver::Solver(Puzzle p, bool o)
 {
 }
 
-// enable or disable text based output of the solver
-//bool output = true;
-
 // iteratively attempts to solve the puzzle using the algorithms
 void Solver::solve()
 {
@@ -27,6 +24,8 @@ void Solver::solve()
 
 		updateHiddenPairs();
 		updateHiddenTriples();
+
+		updatePointingCells();
 
 		count++;
 	}
@@ -246,7 +245,7 @@ void Solver::removeNakedPair(int p1, int p2, std::vector<int> pair, std::vector<
 		// remove values of the pair from the cell's options
 		std::set_difference(cell.begin(), cell.end(), pair.begin(), pair.end(), std::inserter(updated, updated.begin()));
 		
-		if (updated.size() != 0) {
+		if ((updated.size() != 0) and updated.size() != cell.size()) {
 			
 			if (output) { std::cout << "naked pair " << pair[0] << "+" << pair[1] << " removed in cell " << i << '\n'; }
 			puzzle.updateCell(i, updated);
@@ -443,15 +442,15 @@ void Solver::isolateHiddenTriples(int index, std::string mod_type)
 	if ((triplet_idxs.size() == 3) and (triplet.size() == 3)) {
 		for (int i : triplet_idxs) {
 			std::vector<int> cell = puzzle.getCell(i);
-			std::vector<int> updated_cell{};
+			std::vector<int> updated{};
 
 			for (auto num : triplet) {
 				if (std::find(cell.begin(), cell.end(), num) != cell.end()) { // replace triplet cells with only the members of the triplet which it already contained 
-					updated_cell.push_back(num);
+					updated.push_back(num);
 				}
 			}
-			if (updated_cell.size() != 0) {
-				puzzle.updateCell(i, updated_cell);
+			if ((updated.size() != 0) and updated.size() != cell.size()) {
+				puzzle.updateCell(i, updated);
 				
 				if (output) { std::cout << "hidden triple " << triplet[0] << '+' << triplet[1] << "+" << triplet[2] << " isolated in cell " << i << '\n'; }
 			}
@@ -463,11 +462,11 @@ void Solver::isolateHiddenTriples(int index, std::string mod_type)
 void Solver::updatePointingCells()
 {
 	for (int i = 1; i <= 73; i += 9) { // first id of each row 
-		isolateHiddenTriples(i, "row");
+		removePointingCells(i, "row");
 	}
 
 	for (int i = 1; i <= 9; i++) { // first id of each col
-		isolateHiddenTriples(i, "col");
+		removePointingCells(i, "col");
 	}
 }
 
@@ -477,16 +476,68 @@ void Solver::removePointingCells(int index, std::string mod_type)
 	if (mod_type == "row") { module = puzzle.getRowIds(index); }
 	if (mod_type == "col") { module = puzzle.getColIds(index); }
 	
-	std::map<int, std::vector<int>> found_idx{}; // records the index each time a number occurs, for every number in the module
-	for (int i : module) {
-		std::vector<int> cell = puzzle.getCell(i);
-		if (cell.size() > 1) {
-			for (int j : cell) {
-				found_idx[j].push_back(i);
+	// iterate through the module in groups of 3 cells
+	for (int i = 0; i < 9; i += 3) {
+		std::map<int, std::vector<int>> found_idx{};
+
+		for (int j = 0; j < 3; j++) {
+			std::vector<int> cell = puzzle.getCell(module[i + j]);
+			
+			if (cell.size() > 1) {
+				for (int k : cell) {
+					//found_idx[k].push_back(i + j); // ??
+					found_idx[k].push_back(module[i + j]); // ??
+				}
+			}
+		}
+
+		for (auto it = found_idx.begin(); it != found_idx.end();)
+		{
+			if ((it->second.size() != 3) and (it->second.size() != 2)) // remove any numbers that don't occur 2 or 3 times
+				it = found_idx.erase(it);
+			else
+				++it;
+		}
+
+		for (auto const& [key, val] : found_idx) {
+			bool found = false;
+			std::vector<int> box_ids = puzzle.getBoxIds(val[0]); // see if the number occurs anywhere else in the box
+			for (int x : box_ids) {
+				if (std::find(val.begin(), val.end(), x) != val.end()) { continue; } // skip cells that are a part of the pair or triple 
+				
+				std::vector<int> cell = puzzle.getCell(x); 
+				if (std::find(cell.begin(), cell.end(), key) != cell.end()) { // stop if a cell that isn't part of the pair or triple contains those nums
+					found = true; 
+				}
+			}
+			
+			if (!found) { // cells are a pointing pair or triple, remove as option from other cells in the row or column
+				for (int y : module) {
+					if (std::find(val.begin(), val.end(), y) != val.end()) { continue; } // skip cells that are a part of the pair or triple
+
+					std::vector<int> cell = puzzle.getCell(y);
+					if (cell.size() == 1) { continue; }
+
+					//std::vector<int> vec = val;
+					//std::sort(vec.begin(), vec.end());
+
+					std::vector<int> vec = {key};
+					std::vector<int> updated{};
+					std::sort(cell.begin(), cell.end());
+
+					// remove values of the pair from the cell's options
+					std::set_difference(cell.begin(), cell.end(), vec.begin(), vec.end(), std::inserter(updated, updated.begin()));
+
+					//if ((updated.size() != 0) and (updated.size() != cell.size())) {
+					if ((updated.size() != cell.size()) and (updated.size() != 0)) {
+						if (output) {
+							std::cout << "intersection removal: " << vec[0] << " removed in cell " << y << '\n';
+						}
+						puzzle.updateCell(y, updated);
+					}
+					else { continue; }
+				}
 			}
 		}
 	}
-	
-
-
 }
