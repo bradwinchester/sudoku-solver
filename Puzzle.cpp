@@ -157,9 +157,13 @@ void Puzzle::printPuzzle()
 
 void Puzzle::printPuzzleWithNotes()
 {
-	std::cout << "-------------------------------------------------------" << '\n';
+	std::cout << "---------------------------------------------------------" << '\n';
+	
 	std::vector<int> vec{};
-	for (int i = 0; i < 81; i += 9) {				
+	for (int i = 0; i < 81; i += 9) {	
+		if (i == 27 or i == 54){
+			std::cout << "---------------------------------------------------------" << '\n';
+		}
 		for (int j = 1; j <= 9; j++) {
 			vec = cells[i + j];
 			if (j == 1) { std::cout << "| "; }
@@ -169,9 +173,16 @@ void Puzzle::printPuzzleWithNotes()
 			else { std::cout << " "; }
 			if (std::find(vec.begin(), vec.end(), 3) != vec.end()) { std::cout << "3"; }
 			else { std::cout << " "; }
-			std::cout << " | ";
+			
+			if (j == 3 or j == 6) {
+				std::cout << " || ";
+			}
+			else {
+				std::cout << " | ";
+			}
 		}
 		std::cout << '\n';
+		
 
 		for (int j = 1; j <= 9; j++) {
 			vec = cells[i + j];
@@ -182,7 +193,12 @@ void Puzzle::printPuzzleWithNotes()
 			else { std::cout << " "; }
 			if (std::find(vec.begin(), vec.end(), 6) != vec.end()) { std::cout << "6"; }
 			else { std::cout << " "; }
-			std::cout << " | ";
+			if (j == 3 or j == 6) {
+				std::cout << " || ";
+			}
+			else {
+				std::cout << " | ";
+			}
 		}
 		std::cout << '\n';
 
@@ -195,9 +211,14 @@ void Puzzle::printPuzzleWithNotes()
 			else { std::cout << " "; }
 			if (std::find(vec.begin(), vec.end(), 9) != vec.end()) { std::cout << "9"; }
 			else { std::cout << " "; }
-			std::cout << " | ";
+			if (j == 3 or j == 6) {
+				std::cout << " || ";
+			}
+			else {
+				std::cout << " | ";
+			}
 
-			if (j == 9) { std::cout << '\n' << "-------------------------------------------------------"; }
+			if (j == 9) { std::cout << '\n' << "---------------------------------------------------------"; }
 		}
 		std::cout << '\n';
 	}

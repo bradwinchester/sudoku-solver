@@ -25,8 +25,8 @@ void Solver::solve()
 		updateHiddenPairs();
 		updateHiddenTriples();
 
-		updatePointingCells();
-
+		//updatePointingCells();
+		
 		count++;
 	}
 	puzzle.printPuzzleWithNotes();
@@ -157,7 +157,7 @@ void Solver::removeNumberFromModule(int cell_id, int value)
 			cell.erase(remove(cell.begin(), cell.end(), value), cell.end()); // remove it and update the cell
 			puzzle.updateCell(i, cell);
 
-			if (output) { std::cout << "updated notes: " << value << " removed from cell " << i << " : row" << '\n'; }
+			if (output) { std::cout << "updated notes: " << value << " removed from cell " << i << " - row" << '\n'; }
 		}
 	}
 
@@ -171,10 +171,10 @@ void Solver::removeNumberFromModule(int cell_id, int value)
 			cell.erase(remove(cell.begin(), cell.end(), value), cell.end());
 			puzzle.updateCell(i, cell);
 			
-			if (output) { std::cout << "updated notes: " << value << " removed from cell " << i << " : col" << '\n'; }
+			if (output) { std::cout << "updated notes: " << value << " removed from cell " << i << " - col" << '\n'; }
 		}
 	}
-
+	
 	std::vector<int> box = puzzle.getBoxIds(cell_id); // repeat the process for the box the cell is in
 	for (int i : box) {
 		if (cell_id == i) { continue; } 
@@ -185,7 +185,7 @@ void Solver::removeNumberFromModule(int cell_id, int value)
 			cell.erase(remove(cell.begin(), cell.end(), value), cell.end());
 			puzzle.updateCell(i, cell);
 			
-			if (output) { std::cout << "updated notes: " << value << " removed from cell " << i << " : box" << '\n'; }
+			if (output) { std::cout << "updated notes: " << value << " removed from cell " << i << " -0box" << '\n'; }
 		}
 	}
 }
