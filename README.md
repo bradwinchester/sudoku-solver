@@ -1,4 +1,3 @@
-![image](https://github.com/bradwinchester/sudoku-solver/assets/104231576/1ccd3bb6-3335-4da1-9541-a7086112bab9)
 # Command Line Sudoku Solver
 This project aims to solve the majority of sudoku puzzles using algorithms that mimmick the steps a human player would take. It is significantly more complex than creating a brute force solver, so this project will be the framework for a future GUI-based solver which will include more features such as puzzle generation and hints.  
 
@@ -9,3 +8,9 @@ The solver iterates through the strategies in the order that Stuart has them lis
 
 ## Suggestions
 The solver runs in the user's default shell. I used windows powershell during development, with the launch size parameter set to 50 rows x 60 columms. If the output of the puzzle is broken, it is likely that the window needs to be wider. 
+
+<p align="center">
+  <img src="https://github.com/bradwinchester/sudoku-solver/assets/104231576/1ccd3bb6-3335-4da1-9541-a7086112bab9" width="500" />
+</p>
+
+
