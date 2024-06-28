@@ -7,7 +7,7 @@ The strategies used in this solver are based on Andrew Stuart's Strategies that 
 The solver iterates through the strategies in the order that Stuart has them listed, which get progressively more difficult. The description of steps the solver is taking can be toggled on or off within the code. In the future I would like to make a GUI solver that can provide the solution step by step and be an aid when solving a puzzle, but at the moment the solver will complete as much of the puzzle as it can. 
 
 ## Suggestions
-The solver runs in the user's default shell. I used windows powershell during development, with the launch size parameter set to 50 rows x 60 columms. If the output of the puzzle is broken, it is likely that the window needs to be wider. 
+The solver runs in the user's default shell. I used windows powershell during development, with the launch size parameter set to 50 rows x 60 columms. If the output of the puzzle is broken, it is likely that the window needs to be wider. Pictured below is how a puzzle should look after running the program.
 
 <p align="center">
   <img src="https://github.com/bradwinchester/sudoku-solver/assets/104231576/1ccd3bb6-3335-4da1-9541-a7086112bab9" width="500" />
