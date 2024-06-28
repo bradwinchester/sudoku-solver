@@ -56,7 +56,7 @@ bool Solver::isSolved()
 		}
 		std::sort(row.begin(), row.end());
 		if ((row.size() == 9) and (row != nums)) {
-			if (output) { std::cout << "Invalid Solution!" << '\n'; }
+			std::cout << "Error: Invalid Solution!" << '\n'; 
 			return false;
 		}
 		if ((row.size() == 9) and (row == nums)) {
@@ -84,7 +84,7 @@ bool Solver::isSolved()
 		}
 		std::sort(col.begin(), col.end());
 		if ((col.size() == 9) and (col != nums)) {
-			if (output) { std::cout << "Invalid Solution!" << '\n'; }
+			std::cout << "Error: Invalid Solution!" << '\n'; 
 			return false;
 		}
 		if ((col.size() == 9) and (col == nums)) {
@@ -113,7 +113,7 @@ bool Solver::isSolved()
 		}
 		std::sort(box.begin(), box.end());
 		if ((box.size() == 9) and (box != nums)) {
-			if (output) { std::cout << "Invalid Solution!" << '\n'; }
+			std::cout << "Error: Invalid Solution!" << '\n'; 
 			return false;
 		}
 		if ((box.size() == 9) and (box == nums)) {
