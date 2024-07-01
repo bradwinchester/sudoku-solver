@@ -25,10 +25,10 @@ void Solver::solve()
 		updateNakedPairs();
 		updateNakedTriples();
 
-		updateHiddenPairs();
-		updateHiddenTriples();
+		//updateHiddenPairs();
+		//updateHiddenTriples();
 		
-		updatePointingCells();
+		//updatePointingCells();
 		findBoxLineReductions();
 		
 		count++;
@@ -592,25 +592,18 @@ void Solver::performBoxLineReduction(int index, std::string mod_type)
 			}
 		}
 		
-		// remove any numbers that don't occur 2 or 3 times
-		for (auto it = box_idx.begin(); it != box_idx.end();)
-		{
-			// remove any numbers that don't occur 2 or 3 times, since they cannot be part of a triple
-			if ((it->second.size() > 3) or (it->second.size() == 1))
-				it = box_idx.erase(it);
-			else
-				++it;
-		}
-		for (auto it = module_idx.begin(); it != module_idx.end();)
-		{
-			// remove any numbers that don't occur 2 or 3 times, since they cannot be part of a triple
-			if ((it->second.size() > 3) or (it->second.size() == 1))
-				it = module_idx.erase(it);
-			else
-				++it;
-		}
+		//// remove any numbers that don't occur 2 or 3 times
+		//for (auto it = box_idx.begin(); it != box_idx.end();)
+		//{
+		//	// remove any numbers that don't occur 2 or 3 times, since they cannot be part of a triple
+		//	if ((it->second.size() > 3) or (it->second.size() == 1))
+		//		it = box_idx.erase(it);
+		//	else
+		//		++it;
+		//}
+		
 
-		// remove cells from the set from the module 
+		// remove cells in the set from the module 
 		for (auto it1 = box_idx.begin(); it1 != box_idx.end();)
 		{
 			for (auto it2 = module_idx.begin(); it2 != module_idx.end();)
@@ -632,18 +625,19 @@ void Solver::performBoxLineReduction(int index, std::string mod_type)
 			else {
 				std::vector<int> box = puzzle.getBoxIds(val[0]);
 				for (int x : box) {
-					//if (std::find(val.begin(), val.end(), x) != val.end()) { continue; } // skip cells that are a part of the set
+					if (std::find(val.begin(), val.end(), x) != val.end()) { continue; } // skip cells that are a part of the set
 					
 					std::vector<int> cell = puzzle.getCell(x);
 					if (cell.size() == 1) { continue; }
 
-				
-					for (auto y : val) {
-						if (std::find(cell.begin(), cell.end(), y) != cell.end()) { 
-							cell.erase(remove(cell.begin(), cell.end(), y), cell.end()); 
+					for (int y : module) {
+						if (x == y) { continue; }
+
+						if (std::find(cell.begin(), cell.end(), key) != cell.end()) { 
+							cell.erase(remove(cell.begin(), cell.end(), key), cell.end()); 
 							puzzle.updateCell(x, cell);
 
-							if (output) { std::cout << "box line reduction: " << y << " removed in cell " << x << '\n'; }
+							if (output) { std::cout << "box line reduction (" << mod_type << "): "  << y << " removed in cell " << x << '\n'; }
 						}
 					}	
 				}
