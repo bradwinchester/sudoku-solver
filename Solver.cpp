@@ -18,14 +18,15 @@ void Solver::solve()
 	while (!isSolved()) {
 		if (count > 10) { break; } // prevents infinite loop
 		updateNotes();
-		
+		updateHiddenSingles();
+
 		updateNakedPairs();
 		updateNakedTriples();
 
 		updateHiddenPairs();
 		updateHiddenTriples();
 
-		//updatePointingCells();
+		updatePointingCells();
 		
 		count++;
 	}
@@ -157,7 +158,7 @@ void Solver::removeNumberFromModule(int cell_id, int value)
 			cell.erase(remove(cell.begin(), cell.end(), value), cell.end()); // remove it and update the cell
 			puzzle.updateCell(i, cell);
 
-			if (output) { std::cout << "updated notes: " << value << " removed from cell " << i << " - row" << '\n'; }
+			if (output) { std::cout << "updated notes (row): " << value << " removed from cell " << i << '\n'; }
 		}
 	}
 
@@ -171,7 +172,7 @@ void Solver::removeNumberFromModule(int cell_id, int value)
 			cell.erase(remove(cell.begin(), cell.end(), value), cell.end());
 			puzzle.updateCell(i, cell);
 			
-			if (output) { std::cout << "updated notes: " << value << " removed from cell " << i << " - col" << '\n'; }
+			if (output) { std::cout << "updated notes (col): " << value << " removed from cell " << i << '\n'; }
 		}
 	}
 	
@@ -185,7 +186,55 @@ void Solver::removeNumberFromModule(int cell_id, int value)
 			cell.erase(remove(cell.begin(), cell.end(), value), cell.end());
 			puzzle.updateCell(i, cell);
 			
-			if (output) { std::cout << "updated notes: " << value << " removed from cell " << i << " -0box" << '\n'; }
+			if (output) { std::cout << "updated notes (box): " << value << " removed from cell " << i << '\n'; }
+		}
+	}
+}
+
+// iterates through every module to find hidden singles
+void Solver::updateHiddenSingles()
+{
+	for (int i = 1; i <= 73; i += 9) { // first id of each row 
+		findNakedPairs(i, "row");
+	}
+
+	for (int i = 1; i <= 9; i++) {  // first id of each col
+		findNakedPairs(i, "col");
+	}
+
+	std::vector<int> box_ids = { 1, 4, 7, 28, 31, 34, 55, 58, 61 }; // first id of each box
+	for (auto i : box_ids) {
+		findNakedPairs(i, "box");
+	}
+}
+
+// searches for hidden singles and isolates them
+void Solver::findHiddenSingles(int index, std::string mod_type)
+{
+	std::vector<int> module{};
+	if (mod_type == "row") { module = puzzle.getRowIds(index); }
+	if (mod_type == "col") { module = puzzle.getColIds(index); }
+	if (mod_type == "box") { module = puzzle.getBoxIds(index); }
+
+	for (int i : module) {
+		std::vector c1 = puzzle.getCell(i);
+	
+		std::map<int, std::vector<int>> found_idx{}; // records the index each time a number occurs, for every number in the module
+		for (int j : module) {
+			std::vector<int> cell = puzzle.getCell(i);
+			if (cell.size() > 1) {
+				for (int k : cell) {
+					found_idx[k].push_back(j);
+				}
+			}
+		}
+
+		for (auto const& [key, val] : found_idx) {
+			if (val.size() == 1) {
+				std::vector<int> cell = { key };
+				puzzle.updateCell(i, cell);
+				if (output) { std::cout << "hidden single " << key << " isolated in cell " << i << '\n'; }
+			}
 		}
 	}
 }
@@ -207,7 +256,6 @@ void Solver::updateNakedPairs()
 	}
 
 }
-
 
 // searches for matching pairs, and removes those possibilites from the other cells in it's module
 void Solver::findNakedPairs(int index, std::string mod_type)
@@ -426,7 +474,7 @@ void Solver::isolateHiddenTriples(int index, std::string mod_type)
 	
 	for (auto it = found_idx.begin(); it != found_idx.end();) 
 	{
-		if ((it->second.size() != 3) and (it->second.size() != 2)) // remove any numbers that don't occur 2 or 3 times, since they cannot be part of a triple
+		if ((it->second.size() != 3) || (it->second.size() != 2)) // remove any numbers that don't occur 2 or 3 times, since they cannot be part of a triple
 			it = found_idx.erase(it);
 		else
 			++it;
@@ -438,7 +486,7 @@ void Solver::isolateHiddenTriples(int index, std::string mod_type)
 		for (int x : val) { triplet_idxs.insert(x); } // get the indexes of the hidden triple 
 		triplet.push_back(key);
 	}
-
+	 
 	if ((triplet_idxs.size() == 3) and (triplet.size() == 3)) {
 		for (int i : triplet_idxs) {
 			std::vector<int> cell = puzzle.getCell(i);
@@ -449,7 +497,7 @@ void Solver::isolateHiddenTriples(int index, std::string mod_type)
 					updated.push_back(num);
 				}
 			}
-			if ((updated.size() != 0) and updated.size() != cell.size()) {
+			if (updated.size() != 0) {
 				puzzle.updateCell(i, updated);
 				
 				if (output) { std::cout << "hidden triple " << triplet[0] << '+' << triplet[1] << "+" << triplet[2] << " isolated in cell " << i << '\n'; }
@@ -485,8 +533,7 @@ void Solver::removePointingCells(int index, std::string mod_type)
 			
 			if (cell.size() > 1) {
 				for (int k : cell) {
-					//found_idx[k].push_back(i + j); // ??
-					found_idx[k].push_back(module[i + j]); // ??
+					found_idx[k].push_back(module[i + j]);
 				}
 			}
 		}
@@ -517,21 +564,17 @@ void Solver::removePointingCells(int index, std::string mod_type)
 
 					std::vector<int> cell = puzzle.getCell(y);
 					if (cell.size() == 1) { continue; }
-
-					//std::vector<int> vec = val;
-					//std::sort(vec.begin(), vec.end());
-
-					std::vector<int> vec = {key};
+					
+					std::vector<int> vec = { key };
 					std::vector<int> updated{};
 					std::sort(cell.begin(), cell.end());
 
 					// remove values of the pair from the cell's options
 					std::set_difference(cell.begin(), cell.end(), vec.begin(), vec.end(), std::inserter(updated, updated.begin()));
 
-					//if ((updated.size() != 0) and (updated.size() != cell.size())) {
 					if ((updated.size() != cell.size()) and (updated.size() != 0)) {
 						if (output) {
-							std::cout << "intersection removal: " << vec[0] << " removed in cell " << y << '\n';
+							std::cout << "intersection removal (" << mod_type << "): " << vec[0] << " removed in cell " << y << '\n';
 						}
 						puzzle.updateCell(y, updated);
 					}
