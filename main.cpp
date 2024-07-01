@@ -27,7 +27,7 @@ int main()
   
     
     // box line reduction
-    std::vector<int> vec1 = {
+    std::vector<int> vec = {
     0,1,6, 0,0,7, 8,0,3,
     0,9,0, 8,0,0, 0,0,0,
     8,7,0, 0,0,1, 0,6,0,

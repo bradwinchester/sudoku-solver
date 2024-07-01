@@ -29,7 +29,7 @@ void Solver::solve()
 		updateHiddenTriples();
 		
 		updatePointingCells();
-		//findBoxLineReductions();
+		findBoxLineReductions();
 		
 		count++;
 	}
@@ -401,65 +401,6 @@ void Solver::isolateHiddenPairs(int index, std::string mod_type)
 	
 }
 	
-	//std::vector<int> module{};
-	//if (mod_type == "row") { module = puzzle.getRowIds(index); }
-	//if (mod_type == "col") { module = puzzle.getColIds(index); }
-	//if (mod_type == "box") { module = puzzle.getBoxIds(index); }
-
-	//std::map<int, std::vector<int>> found_idx{}; // records the index each time a number occurs, for every number in the module
-	//for (int i : module) {
-	//	std::vector<int> cell = puzzle.getCell(i);
-	//	if (cell.size() > 1) {
-	//		for (int j : cell) {
-	//			found_idx[j].push_back(i);
-	//		}
-	//	}
-	//}
-
-	////for (auto it = found_idx.begin(); it != found_idx.end();)
-	////{
-	////	// remove any numbers that don't occur twice
-	////	if (it->second.size() != 2)
-	////		it = found_idx.erase(it);
-	////	else
-	////		++it;
-	////}
-
-	//for (auto const& [key1, val1] : found_idx) {
-	//	std::vector<int> v1 = val1;
-	//	if (v1.size() != 2) { continue; }
-	//	std::sort(v1.begin(), v1.end());
-	//	
-	//	for (auto const& [key2, val2] : found_idx) {
-	//		if (key1 == key2) { continue; } // don't compare a cell to itself
-
-	//		std::vector<int> v2 = val2;
-	//		if (v2.size() != 2) { continue; }
-	//		std::sort(v2.begin(), v2.end());
-
-	//		std::vector<int> pair{};
-	//		int k1 = key1;
-	//		int k2 = key2;
-	//		pair.push_back(k1);
-	//		pair.push_back(k2);
-	//		std::sort(pair.begin(), pair.end());
-
-	//		std::vector<int> c1 = puzzle.getCell(v2[0]);
-	//		if ((c1.size() > 1) and (c1 != pair)) {
-	//			puzzle.updateCell(v2[0], pair);
-	//			if (output) { std::cout << "hidden pair " << pair[0] << "+" << pair[1] << " isolated in cell " << v2[0] << '\n'; }
-	//		}
-
-	//		std::vector<int> c2 = puzzle.getCell(v2[1]);
-	//		if ((c2.size() > 1) and (c2 != pair)) {
-	//			puzzle.updateCell(v2[1], pair);
-	//			if (output) { std::cout << "hidden pair " << pair[0] << "+" << pair[1] << " isolated in cell " << v2[1] << '\n'; }
-	//		}
-	//	}
-	//}
-
-
-
 // iterates through every module to find hidden triples 
 void Solver::updateHiddenTriples()
 {
@@ -540,6 +481,7 @@ void Solver::updatePointingCells()
 	}
 }
 
+// removes numbers from a module that must occur in an adjacent box in the module
 void Solver::removePointingCells(int index, std::string mod_type)
 {
 	std::vector<int> module{};
@@ -608,6 +550,7 @@ void Solver::removePointingCells(int index, std::string mod_type)
 	}
 }
 
+// iterates through all rows and columns to perform box line reduction
 void Solver::findBoxLineReductions()
 {
 	for (int i = 1; i <= 73; i += 9) { // first id of each row 
@@ -619,6 +562,7 @@ void Solver::findBoxLineReductions()
 	}
 }
 
+// locates sets within a row or column and removes them from the box 
 void Solver::performBoxLineReduction(int index, std::string mod_type)
 {
 	std::vector<int> module{};
