@@ -13,9 +13,6 @@ public:
 	void updateNotes();
 	void removeNumberFromModule(int cell_id, int value);
 	
-	void updateHiddenSingles();
-	void findHiddenSingles(int index, std::string mod_type);
-
 	void updateNakedPairs();
 	void findNakedPairs(int index, std::string mod_type);
 	void removeNakedPair(int p1, int p2, std::vector<int> pair, std::vector<int> module);
@@ -31,6 +28,10 @@ public:
 
 	void updatePointingCells();
 	void removePointingCells(int index, std::string mod_type);
+
+	void findBoxLineReductions();
+	void performBoxLineReduction(int index, std::string mod_type);
+
 
 private:
 	Puzzle puzzle{};
