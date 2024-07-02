@@ -592,17 +592,6 @@ void Solver::performBoxLineReduction(int index, std::string mod_type)
 			}
 		}
 		
-		//// remove any numbers that don't occur 2 or 3 times
-		//for (auto it = box_idx.begin(); it != box_idx.end();)
-		//{
-		//	// remove any numbers that don't occur 2 or 3 times, since they cannot be part of a triple
-		//	if ((it->second.size() > 3) or (it->second.size() == 1))
-		//		it = box_idx.erase(it);
-		//	else
-		//		++it;
-		//}
-		
-
 		// remove cells in the set from the module 
 		for (auto it1 = box_idx.begin(); it1 != box_idx.end();)
 		{
