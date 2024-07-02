@@ -19,16 +19,16 @@ void Solver::solve()
 {
 	int count{};
 	while (!isSolved()) {
-		if (count > 10) { break; } // prevents infinite loop
+		if (count > 30) { break; } // prevents infinite loop
 		updateNotes();
 	
 		updateNakedPairs();
 		updateNakedTriples();
 
-		//updateHiddenPairs();
-		//updateHiddenTriples();
+		updateHiddenPairs();
+		updateHiddenTriples();
 		
-		//updatePointingCells();
+		updatePointingCells();
 		findBoxLineReductions();
 		
 		count++;
